@@ -130,9 +130,15 @@ class AsyncEventsThread(threading.Thread):
 
         while not self.terminate:
             eventName, info, callback = self.eventQueue.get(block=True)
+            print (eventName)
+            print (info)
+            print (callback)
             try:
                 event = trigger(eventName, info, async=True)
+                print (event)
+                print (type(callback))
                 if isinstance(callback, types.FunctionType):
+                    print ("calling callback")
                     callback(event)
             except Exception:
                 logger.exception('In handler for event "%s":' % eventName)
@@ -147,6 +153,7 @@ class AsyncEventsThread(threading.Thread):
         :param eventName: The event name to pass to the girder.events.trigger
         :param info: The info object to pass to girder.events.trigger
         """
+        print("events trigger")
         self.eventQueue.put((eventName, info, callback))
 
     def stop(self):
